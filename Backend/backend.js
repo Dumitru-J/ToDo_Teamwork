@@ -42,7 +42,7 @@ async function loadUsers() {
 }
 
 //alle Users laden und ans Frontend schicken
-app.get("/users", asynch (req, res) => {
+app.get('/users', async (req, res) => {
     const users = await loadUsers();            //loadUsers ladet alle Users vom json-File
     res.json(users);
 })

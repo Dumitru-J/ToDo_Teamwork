@@ -20,8 +20,8 @@ let todo_list;
 
 let loginButton = document.querySelector('#anmelden');
 loginButton.addEventListener('click', function() {
-    let benutzername = document.querySelector('#benutzername').value;
-    let passwort = document.querySelector('#passwort').value;
+    let benutzername = document.querySelector('#email').value;
+    let passwort = document.querySelector('#passwort_anmelden').value;
     anmelden(benutzername, passwort).then(response => {
         if (response.success) {
             alert('Anmeldung erfolgreich!');
