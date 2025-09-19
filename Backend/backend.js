@@ -43,17 +43,12 @@ async function loadUsers() {
 }
 
 //alle Users laden und ans Frontend schicken
-<<<<<<< HEAD
-app.get('/users', async (req, res) => {
-    const users = await loadUsers();            //loadUsers ladet alle Users vom json-File
-    res.json(users);
-})
-=======
+
 app.get("/users", async (req, res) => {
   const allUsers = await loadUsers();
   res.json(allUsers);
 });
->>>>>>> 4c03b20f23b6fafad8767e7a9983abe6b9b5b80f
+
 
 
 app.listen(PORT, () => {
