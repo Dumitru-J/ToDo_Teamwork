@@ -1,4 +1,4 @@
-import { getToDos, registrieren, anmelden } from "./model";
+import { getToDos, registrieren } from "./model.js";
 
 let registrierButton = document.querySelector('#registrieren');
 
