@@ -15,10 +15,10 @@ const users = "./users.json";
 
 
 //fügt User users.json File hinzu -> POST request kommt vom Frontend und wird dann hiermit ausgeführt.
-app.post('/users', async (req, res) => {
+app.post('/registrieren', async (req, res) => {
   const user = req.body;
   const allUsers = await loadUsers();
-  allUsers.push(user);        
+  allUsers.push(user);
   await writeUsersToFile(allUsers);   
   console.log('Empfangene Benutzerdaten:', user);
   res.status(201).json(user);
@@ -43,10 +43,12 @@ async function loadUsers() {
 }
 
 //alle Users laden und ans Frontend schicken
+
 app.get("/users", async (req, res) => {
   const allUsers = await loadUsers();
   res.json(allUsers);
 });
+
 
 
 app.listen(PORT, () => {

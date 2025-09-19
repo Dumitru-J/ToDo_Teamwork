@@ -7,7 +7,7 @@ export async function anmelden(benutzername, passwort) {
 }
 
 export async function registrieren(benutzername, passwort) {
-    await fetch('http://localhost:3000/registrieren', {
+    await fetch('http://localhost:3000/registrieren/users', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ benutzername, passwort })
