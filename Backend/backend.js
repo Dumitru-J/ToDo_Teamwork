@@ -15,12 +15,13 @@ const users = "./users.json";
 
 
 //fügt User users.json File hinzu -> POST request kommt vom Frontend und wird dann hiermit ausgeführt.
-app.post('/users', (req, res) => {
-    const user = req.body;
-    users.push(user);
-    writeUsersToFile(users);
-    console.log('Empfangene Benutzerdaten:', user);
-    res.status(201).send(user);
+app.post('/users', async (req, res) => {
+  const user = req.body;
+  const allUsers = await loadUsers();
+  allUsers.push(user);        
+  await writeUsersToFile(allUsers);   
+  console.log('Empfangene Benutzerdaten:', user);
+  res.status(201).json(user);
 });
 
 
@@ -29,23 +30,23 @@ app.post('/users', (req, res) => {
 
 
 //User Speicher/Write-Funktion
-async function writeUsersToFile(users) {
-    const data = JSON.stringify(users, null, 2);
-    await fs.writeFile('users.json', data);
-    console.log('Benutzerdaten in user.json gespeichert');
+async function writeUsersToFile(usersArray) {
+  const data = JSON.stringify(usersArray, null, 2);
+  await fs.writeFile(users, data);
+  console.log('Benutzerdaten in users.json gespeichert');
 }
 
 //user Load-Funktion für alle Benutzerdaten
 async function loadUsers() {
-    const data = await fs.readFile(users.json, "utf8");
-    return JSON.parse(data);
+  const data = await fs.readFile(users, "utf8");
+  return JSON.parse(data);
 }
 
 //alle Users laden und ans Frontend schicken
-app.get("/users", asynch (req, res) => {
-    const users = await loadUsers();            //loadUsers ladet alle Users vom json-File
-    res.json(users);
-})
+app.get("/users", async (req, res) => {
+  const allUsers = await loadUsers();
+  res.json(allUsers);
+});
 
 
 app.listen(PORT, () => {
