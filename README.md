@@ -28,22 +28,28 @@ Angehensweise:
 
 Strukturidee (von Oliver)
 
+```
 Backend/
- ├─ users.json
- ├─ todo/             ← Ordner für alle To-Dos
- │   ├─ max@mail.de.json
- │   ├─ lisa@mail.de.json
- │   └─ ...
- └─ backend.js
+├─ users.json
+├─ todo/ # Ordner für alle To-Dos
+│ ├─ max@mail.de.json
+
+│ ├─ lisa@mail.de.json
+
+│ └─ ...
+└─ backend.js
+
 Frontend/
- ├─ index.html / login.html
- ├─ todo.html
- ├─ model/         ← Datenmodelle / fetch-Methoden
- │    ├─ userModel.js
- │    └─ todoModel.js
- ├─ view/          ← DOM-Rendering
- │    ├─ loginView.js
- │    └─ todoView.js
- └─ controller/    ← Verbindet Model + View	(reagiert auf Events)
-      ├─ loginController.js
-      └─ todoController.js
+├─ index.html
+├─ login.html
+├─ todo.html
+├─ model/ # Datenmodelle / fetch-Methoden
+│ ├─ userModel.js
+│ └─ todoModel.js
+├─ view/ # DOM-Rendering
+│ ├─ loginView.js
+│ └─ todoView.js
+└─ controller/ # Verbindet Model + View (reagiert auf Events)
+├─ loginController.js
+└─ todoController.js
+```
