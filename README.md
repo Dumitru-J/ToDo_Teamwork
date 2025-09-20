@@ -33,9 +33,7 @@ Backend/
 ├─ users.json
 ├─ todo/ # Ordner für alle To-Dos
 │ ├─ max@mail.de.json
-
 │ ├─ lisa@mail.de.json
-
 │ └─ ...
 └─ backend.js
 
@@ -53,3 +51,4 @@ Frontend/
 ├─ loginController.js
 └─ todoController.js
 ```
+
