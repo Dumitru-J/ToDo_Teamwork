@@ -1,23 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ToDo-Liste</title>
-    <script src="app.js" type="modules"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ToDo-Liste</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" type="module"></script>
 </head>
 <body>
-    <div>
-    <button id="abmelden">Abmelden</button>
+  <div class="container">
+    
+    <div class="header">
+      <h1> Meine ToDo-Liste</h1>
+      <button id="abmelden" class="logout">Abmelden</button>
     </div>
-    <div>
-        <label for="neueAufgabe">
-            <input type="text" id="neueAufgabe" placeholder="Neue Aufgabe eingeben">
-            <button id="hinzufuegen">Hinzufügen</button>
-        </label>
-    </div>
-    <ul id="aufgabenListe">
 
+    
+    <div class="eingabe">
+      <input type="text" id="neueAufgabe" placeholder="Neue Aufgabe eingeben...">
+      <button id="hinzufuegen">➕ Hinzufügen</button>
+    </div>
+
+    
+    <ul id="aufgabenListe" class="liste">
+      <!-- Aufgaben werden hier eingefügt -->
     </ul>
+  </div>
 </body>
 </html>

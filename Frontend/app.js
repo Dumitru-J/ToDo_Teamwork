@@ -1,6 +1,3 @@
-import { getToDos, registrieren } from "./model.js";
-
-
 let registrierButton = document.querySelector('#registrieren');
 registrierButton.addEventListener('click', async function () {
     let benutzername = document.querySelector('#benutzername').value;
@@ -11,10 +8,18 @@ registrierButton.addEventListener('click', async function () {
         headers: { 'Content-Type': 'application/json' },    
         body: JSON.stringify(data)
     });
+    const result = await response.json();
+    if (response.ok) {
+        console.log('Erfolgreich registriert:', result);
+        alert('Registrierung erfolgreich! Bitte melden Sie sich an.');
+        window.location.href = 'index.html'; 
+    } else {
+        console.error('Fehler bei der Registrierung:', result.message);
+        alert('Registrierung fehlgeschlagen: ' + result.message);
+    }
 });
 
 let loginButton = document.querySelector('#anmelden');
-
 loginButton.addEventListener('click', async function() {
     let benutzername = document.querySelector('#email').value;
     let passwort = document.querySelector('#passwort_anmelden').value;
@@ -24,6 +29,16 @@ loginButton.addEventListener('click', async function() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
     });
+    const result = await response.json();
+    if (response.ok) {
+        console.log('Erfolgreich angemeldet:', result);
+        window.location.href = 'liste.html'; 
+    } else {
+        console.error('Fehler bei der Anmeldung:', result.message);
+        alert('Anmeldung fehlgeschlagen: ' + result.message);
+    }
 });
+
+
 
 

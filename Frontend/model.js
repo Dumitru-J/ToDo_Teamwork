@@ -46,7 +46,6 @@
 
 
 
-
 /*let registrierButton = document.querySelector('#registrieren');
 
 registrierButton.addEventListener('click', async function () {
