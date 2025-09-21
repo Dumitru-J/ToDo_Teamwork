@@ -44,7 +44,7 @@ Backend/
 Frontend/
 ├─ index.html bzw. login.html
 ├─ todo.html
-├─ model/ # Datenmodelle / fetch-Methoden
+├─ models/ # Datenmodelle / fetch-Methoden
 │ ├─ userModel.js
 │ └─ todoModel.js
 ├─ view/ # DOM-Rendering
@@ -54,6 +54,7 @@ Frontend/
 ├─ loginController.js
 └─ todoController.js
 ```
+
 
 
 
