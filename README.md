@@ -60,7 +60,8 @@ Frontend/
 1. User melden sich an und wird von der Login-Seite zur To-Do-Listen-Seite weitergeleitet
 2. Fetch-Request ladet vom Backend die To-Do Listen vom User mit zugehöriger E-Mail Addresse
 3. User kann im Frontend Listen bearbeiten (erstellen,löschen, umbenennen, Tasks erstellen/löschen, als erledigt markieren und damit ausgrauen)
-4. User drückt auf "Liste(n) speichern" und im Backend wird dann aus dem ToDo-Folder das zugehörige email@email.json-File überschreiben (Nachteil: Kein automatisches Zwischenspeichern von Änderungen, Vorteil: weniger Datenverkehr)
+4. User drückt auf "Liste(n) speichern" und im Backend wird dann im ToDo-Folder das zugehörige email@email.json-File überschreiben (Nachteil: Kein automatisches Zwischenspeichern von Änderungen, Vorteil: weniger Datenverkehr)
+
 
 
 
