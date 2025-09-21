@@ -1,38 +1,44 @@
-import { getToDos, registrieren } from "./model.js";
-
 let registrierButton = document.querySelector('#registrieren');
-
-registrierButton.addEventListener('click', function() {
+registrierButton.addEventListener('click', async function () {
     let benutzername = document.querySelector('#benutzername').value;
-    let passwort = document.querySelector('#passwort').value;
-    registrieren(benutzername, passwort).then(response => {
-        if (response.success) {
-            alert('Registrierung erfolgreich!');
-        } else {
-            alert('Fehler bei der Registrierung: ' + response.error);
-        }
-    }).catch (err => {
-        alert('Server nicht erreichbar: ' + err.message);
+    let passwort = document.querySelector('#passwort').value;   
+    const data = { benutzername, passwort };
+    const response = await fetch('http://localhost:3000/registrieren', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },    
+        body: JSON.stringify(data)
     });
+    const result = await response.json();
+    if (response.ok) {
+        console.log('Erfolgreich registriert:', result);
+        alert('Registrierung erfolgreich! Bitte melden Sie sich an.');
+        window.location.href = 'index.html'; 
+    } else {
+        console.error('Fehler bei der Registrierung:', result.message);
+        alert('Registrierung fehlgeschlagen: ' + result.message);
+    }
 });
-
-let todo_list;
 
 let loginButton = document.querySelector('#anmelden');
-loginButton.addEventListener('click', function() {
+loginButton.addEventListener('click', async function() {
     let benutzername = document.querySelector('#email').value;
     let passwort = document.querySelector('#passwort_anmelden').value;
-    anmelden(benutzername, passwort).then(response => {
-        if (response.success) {
-            alert('Anmeldung erfolgreich!');
-            window.location.href = 'liste.html';
-            todo_list = getToDos(benutzername);
-        } else {
-            alert('Fehler bei der Anmeldung: ' + response.error);
-        }
-    }).catch (err => {
-        alert('Server nicht erreichbar: ' + err.message);
+    const data = { benutzername, passwort };
+    const response = await fetch('http://localhost:3000/anmelden', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
     });
+    const result = await response.json();
+    if (response.ok) {
+        console.log('Erfolgreich angemeldet:', result);
+        window.location.href = 'liste.html'; 
+    } else {
+        console.error('Fehler bei der Anmeldung:', result.message);
+        alert('Anmeldung fehlgeschlagen: ' + result.message);
+    }
 });
+
+
 
 

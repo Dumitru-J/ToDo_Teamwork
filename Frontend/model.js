@@ -1,29 +1,3 @@
-export async function anmelden(benutzername, passwort) {
-    await fetch('http://localhost:3000/anmelden', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ benutzername, passwort })
-    });
-}
-
-export async function registrieren(benutzername, passwort) {
-    await fetch('http://localhost:3000/registrieren/users', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ benutzername, passwort })
-    });
-}
-
-export async function getToDos(benutzername) {
-    let res = await fetch('http://localhost:3000/todos', {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ benutzername })
-    });
-    return res.json();
-}   
-
-
 
 
 
