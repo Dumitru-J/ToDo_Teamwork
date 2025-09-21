@@ -1,0 +1,110 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f6fa;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+}
+
+.container {
+  margin-top: 3rem;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  width: 350px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.header h1 {
+  font-size: 1.2rem;
+  margin: 0;
+  color: #333;
+}
+
+.logout {
+  background: #e74c3c;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.logout:hover {
+  background: #c0392b;
+}
+
+.eingabe {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.eingabe input {
+  flex: 1;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  
+}
+
+.eingabe input:focus {
+  border-color: #4a90e2;
+  outline: none;
+}
+
+.eingabe button {
+  background: #4a90e2;
+  border: none;
+  color: white;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.eingabe button:hover {
+  background: #357ab8;
+}
+
+.liste {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.liste li {
+  background: #f0f2f5;
+  padding: 0.8rem;
+  margin-bottom: 0.5rem;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.liste li span {
+  flex: 1;
+}
+
+.liste li button {
+  background: #e74c3c;
+  border: none;
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.liste li button:hover {
+  background: #c0392b;
+}

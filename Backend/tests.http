@@ -1,0 +1,21 @@
+//File für Backend-Tests ohne existierendem Frontend
+### Registrierung testen
+POST http://localhost:3000/registrieren
+Content-Type: application/json
+
+{
+  "email": "max@mail.de",
+  "password": "1234"
+}
+
+### Login testen
+POST http://localhost:3000/anmelden
+Content-Type: application/json
+
+{
+  "email": "max@mail.de",
+  "password": "1234"
+}
+
+### Logout testen
+POST http://localhost:3000/abmelden
