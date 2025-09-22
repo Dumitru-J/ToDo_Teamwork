@@ -75,7 +75,7 @@ Arbeitsende -> Push
 
 
 ## MVC Struktur ##
-
+```
 1.) User schickt Anfrage an Controller
 2.) Controller sendet Anfrage an Model
 3.) Model interagiert mit Logik (Datnebank) und gibt Daten an Controller weiter
@@ -91,7 +91,7 @@ app.js      => Controller / Schnittstelle
 model.js    => sendet/holt die Daten der User vom backend
 view.js     => rendert Daten
 backend.js  => Speichert User und ToDos
-
+```
 
 
 
