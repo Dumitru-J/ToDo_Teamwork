@@ -13,7 +13,7 @@
 
 // Nutzer anlegen
 export async function registrieren(email, password){
-    const res = await fetch('http://localhost:3000/registireren', {
+    const res = await fetch('http://localhost:3000/registrieren', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ email, password})
@@ -227,4 +227,5 @@ loginButton.addEventListener('click', async function () {
     }
 });
 */
+
 
