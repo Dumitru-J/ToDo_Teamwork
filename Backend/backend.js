@@ -1,8 +1,9 @@
 
 
-import express from 'express';    //npm install --save-dev @types/express -> IntelliSense Extention ts(7016) error solution
-import cors from 'cors';          //npm i --save-dev @types/cors -> IntelliSense Extention ts(7016) error solution
-import fs from "fs/promises"; 
+import express from 'express';                                                                  //npm install --save-dev @types/express -> IntelliSense Extention ts(7016) error solution
+import cors from 'cors';                                                                        //npm i --save-dev @types/cors -> IntelliSense Extention ts(7016) error solution
+import fs from "fs/promises";
+import path from "path";
 const PORT = 3000;
 
 const app = express();
@@ -12,66 +13,75 @@ app.use(cors());
 //json-File von allen Nutzern. Hier sollen User gespeichert und ausgelesen werden
 const users = "./users.json";
 
-//!USER-Routen und Funktionen!
+// Ordner für alle User-To-Do-Listen
+const toDoListen = "./ToDos";                 // Ordner für alle User-To-Do-Listen
+
+
+// ------------------ USER ROUTEN ------------------
 
 //!USER-REGISTRIERUNG!
 //fügt User users.json hinzu
 app.post('/registrieren', async (req, res) => {
-  const user = req.body;                                                                        //Nutzerdaten vom request-body
-  const allUsers = await loadUsers();                                                           //Liste existierenter Users wird geladen
+  //const user = req.body;                                                                        //Nutzerdaten vom request-body
+  const { email, password } = req.body;   //besser. Holt sich nur relevantes
+  const allUsers = await loadUsers();                                                             //Liste existierenter Users wird geladen
 
   //checkt ob neuer user bereits existiert .toLowerCase verhindert groß/klein Registrierung mit selber E-Mail 
-  const exists = allUsers.some(u => u.email.toLowerCase() === user.email.toLowerCase());       //some -> array-Methode die checkt ob ein Element eine Bedingung erfüllt
-  if (exists) {                                                                                //in diesem Fall: ob eine E-Mail Addresse bereits existiert
-    console.log('User mit der E-Mail "', user.email, '" existiert bereits!');
-    return res.status(400).json({ message: 'User existiert bereits' });                        //400 -> schickt Fehlermeldung mit Message zurück
+  const exists = allUsers.some(u => u.email.toLowerCase() === email.toLowerCase());               //some -> array-Methode die checkt ob ein Element eine Bedingung erfüllt
+  if (exists) {                                                                                   //in diesem Fall: ob eine E-Mail Addresse bereits existiert
+    console.log(`User mit der E-Mail "${email}" existiert bereits!`);
+    return res.status(400).json({ message: "User existiert bereits" });                           //400 -> schickt Fehlermeldung mit Message zurück
   }
 
   //speichert neuen User
-  allUsers.push(user);
+  const newUser = { email, password };
+  allUsers.push(newUser);
   await writeUsersToFile(allUsers);
 
   //erstellt To-Do-Listen-Datei für neuen User
-  const toDoPath = getToDoPath(user.email);
+  const toDoPath = getToDoPath(email);
   await fs.writeFile(toDoPath, JSON.stringify([], null, 2));
 
-  console.log('Neuer Benutzer gespeichert:', user.email);
-  res.status(201).json({ message: 'Neuer Benutzer gespeichert', user: user.email });         //201 (created) -> schickt Erfolgsmeldung mit Message zurück und erstellt User
-  res.status(201).json({ message: 'To-Do-Listen Datei für neuen Benutzer angelegt:', user: user.email });
-});                                                                                          //user: user.email weil Objektliterale so nicht erlaubt (erwartet key: value)
+  console.log('Neuer Benutzer gespeichert:', email);
+  res.status(201).json({
+    message: 'Neuer Benutzer gespeichert und To-Do-Listen Datei angelegt',user: email
+  });
+});
+                                                                                         //user: user.email weil Objektliterale so nicht erlaubt (erwartet key: value)
 
 
 //!USER-ANMELDUNG!
 // Prüft Login-Daten und meldet User an sofern Login-Daten stimmen
 app.post('/anmelden', async (req, res) => {
-  const user = req.body;
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({ message: "Email und Passwort erforderlich" });
+  }
+
   const allUsers = await loadUsers();
+  const user = allUsers.find(u => u.email.toLowerCase() === email.toLowerCase());
 
- 
-  const userexists = allUsers.find(u => u.email.toLowerCase() === user.email.toLowerCase());        //Array-Methode die nach Element mit identischer E-Mail/User sucht
-                                                                                                    //und ganzes Element (Objekt mit email und passwort) zwischenspeichert
-  if (!userexists) {                                                                                //wenn keine passende E-Mail Addresse gefunden wird, dann:
-    console.log('Login fehlgeschlagen: User mit Email', user.email, 'nicht gefunden');
-    return res.status(401).json({ message: 'Email oder Passwort falsch' });
+  if (!user || user.password !== password) {
+    console.log(`Login fehlgeschlagen für: ${email}`);
+    return res.status(401).json({ message: "Email oder Passwort falsch" });
   }
 
-  if (user.password !== userexists.password) {                                                      //wenn das Passwort nicht übereinstimmt, dann ebenso:
-    console.log('Login fehlgeschlagen: Falsches Passwort für', user.email);
-    return res.status(401).json({ message: 'Email oder Passwort falsch' });
-  }
-
-  // Login erfolgreich
-  console.log('User angemeldet:', user.email);
-  res.status(200).json({ message: 'Login erfolgreich', user: user.email });                         //200 (OK) -> "Überprüft und OK"-Message
+  console.log("User angemeldet:", email);
+  res.status(200).json({ message: "Login erfolgreich", user: email });
 });
 
 //!USER-ABMELDUNG!
 app.post('/abmelden', (req, res) => {
-  console.log('User abgemeldet');
-  res.status(200).json({ message: 'Logout erfolgreich' });
+  //res.redirect("/index.html");                                                     wenn nicht über Frontend (laut MCP -> Frontend-Umleitung)
+  console.log("User abgemeldet");
+  res.status(200).json({ message: "Logout erfolgreich" });
 });
 
-
+//!USER-LISTE
+app.get("/users", async (req, res) => {
+  const allUsers = await loadUsers();
+  res.json(allUsers);
+});
 
 //User Speicher/Write-Funktion
 async function writeUsersToFile(usersArray) {
@@ -86,16 +96,10 @@ async function loadUsers() {
   return JSON.parse(data);
 }
 
-//alle Users laden und als Response schicken
-app.get("/users", async (req, res) => {
-  const allUsers = await loadUsers();
-  res.json(allUsers);
-});
 
-//!TO-DO-Liste Routen!
 
-const toDoListen = "./ToDos";                 // Ordner für alle User-To-Do-Listen
 
+// ------------------ TO-DO ROUTEN ------------------
 //!TO-DO-Liste erstellen -> bei /registrieren eingebaut
 
 //!TO-DO-Liste bei Änderungen aktualisieren
@@ -115,10 +119,10 @@ app.post("/todos/save", async (req, res) => {
 
 //Pfad zur To-Do-json.Datei eines Users
 function getToDoPath(email) {
-  // Email -> gültiger Dateiname (z. B. alles klein, Sonderzeichen ersetzen)
   const useremail = email.toLowerCase().replace(/[^a-z0-9]/g, "_");
-  return path.join(toDoOrdner, `${useremail}.json`);
+  return path.join(toDoListen, `${useremail}.json`);
 }
+
 
 
 
