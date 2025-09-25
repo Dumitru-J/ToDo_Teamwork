@@ -89,3 +89,62 @@ input:focus{border-color:var(--primary)}
 .msg.show{display:block}
 .msg.ok{background:#e9f9ee;color:#1e7e34;border:1px solid #c9efd3}
 .msg.err{background:#fdecea;color:#a91e2c;border:1px solid #f5c2c7}
+
+
+@media (max-width: 480px) {
+  body {
+    padding: 10px;
+    justify-content: center;
+  }
+
+  .container {
+    width: 100%;
+    margin: 16px 0;
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: none;
+  }
+
+  h1 {
+    font-size: 1.2rem;
+  }
+
+  h2 {
+    font-size: 1rem;
+  }
+
+  input, .btn, button {
+    font-size: 1rem;
+    padding: 10px 12px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .eingabe {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .liste li {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 8px;
+  }
+
+  .liste li span {
+    margin-bottom: 6px;
+  }
+
+  .todo-checkbox {
+    width: 16px;
+    height: 16px;
+  }
+
+  .todo-del {
+    padding: 6px 8px;
+  }
+}
