@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ToDo – Liste</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="app.js" type="module" defer></script>
+</head>
+<body>
+  <div class="container list">
+    <header class="header">
+      <h1>Meine ToDos</h1>
+      <div class="header-right">
+        <span id="who" class="who"></span>
+        <button id="abmelden" class="btn danger">Abmelden</button>
+      </div>
+    </header>
+
+    
+    <form id="taskForm" class="eingabe">
+      <input type="text" id="neueAufgabe" placeholder="Neue Aufgabe eingeben…" required>
+      <button type="submit" class="btn">➕ Hinzufügen</button>
+    </form>
+
+    <ul id="aufgabenListe" class="liste"><!-- Items via JS --></ul>
+
+    <div id="msg" class="msg" aria-live="polite"></div>
+  </div>
+</body>
+</html>

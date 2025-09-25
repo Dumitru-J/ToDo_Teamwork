@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ToDo – Anmelden/Registrieren</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="app.js" type="module" defer></script>
+</head>
+<body>
+  <div class="container auth">
+    <h1>ToDo-App</h1>
+
+    <div class="cards">
+      
+      <div class="card">
+        <h2>Anmelden</h2>
+        <form id="loginForm">
+          <input type="email" id="email" placeholder="E-Mail eingeben" required autocomplete="username">
+          <input type="password" id="passwort_anmelden" placeholder="Passwort eingeben" required autocomplete="current-password">
+          <button type="submit">Anmelden</button>
+        </form>
+      </div>
+
+      
+      <div class="card">
+        <h2>Registrieren</h2>
+        <form id="registerForm">
+          <input type="email" id="benutzername" placeholder="E-Mail eingeben" required autocomplete="username">
+          <input type="password" id="passwort" placeholder="Passwort eingeben" required autocomplete="new-password">
+          <button type="submit">Registrieren</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="msg" class="msg" aria-live="polite"></div>
+  </div>
+</body>
+</html>
