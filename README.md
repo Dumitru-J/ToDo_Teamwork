@@ -35,17 +35,17 @@ Gruppenarbeit User-Management (registrieren, anmelden und abmelden) + To-Do-List
 ```
 Backend/
 ├─ users.json
-├─ todo/ # Ordner für alle To-Dos
-│ ├─ max@mail.de.json
-│ ├─ lisa@mail.de.json
-│ └─ ...
+├─ todo/ # Ordner für alle User und deren UNABHÄNGIGE To-Do-Listen
+│ ├─ max@mail.de/
+│    ├─ liste1.json
+│    ├─ liste2.json
+│    └─ ...
 └─ backend.js
 
 Frontend/
-├─ index.html
-├─ login.html
+├─ index.html bzw. login.html
 ├─ todo.html
-├─ model/ # Datenmodelle / fetch-Methoden
+├─ models/ # Datenmodelle / fetch-Methoden
 │ ├─ userModel.js
 │ └─ todoModel.js
 ├─ view/ # DOM-Rendering
@@ -55,5 +55,16 @@ Frontend/
 ├─ loginController.js
 └─ todoController.js
 ```
+
+## gedachter Verwendungsablauf (von Oliver)
+
+1. User melden sich an und wird von der Login-Seite zur To-Do-Listen-Seite weitergeleitet
+2. Fetch-Request ladet vom Backend die To-Do Listen vom User mit zugehöriger E-Mail Addresse
+3. User kann im Frontend Listen bearbeiten (erstellen,löschen, umbenennen, Tasks erstellen/löschen, als erledigt markieren und damit ausgrauen)
+4. User drückt auf "Liste speichern" und im Backend wird dann im ToDo-Folder und zugehörigen User-Unterordner das dementsprechende To-Do-ListenID.json überschreiben (Nachteil: Kein automatisches Zwischenspeichern von Änderungen, Vorteil: weniger Datenverkehr)
+
+
+
+
 
 
