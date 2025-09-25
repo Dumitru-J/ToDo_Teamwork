@@ -1,61 +1,53 @@
+// view.js
+// "View" = Alles was im DOM/Frontend angezeigt wird
+// Diese Datei kümmert sich nur um Darstellung, KEINE Datenlogik.
 
+// Ein Objekt "View" mit zwei Funktionen: renderTodos() und showMessage()
+export const View = {
 
+  // ----------------------------------------------------
+  // Funktion: renderTodos(todos)
+  // Rendert alle Todos als <li>-Liste in das UL #aufgabenListe
+  // ----------------------------------------------------
+  renderTodos(todos) {
+    const ul = document.querySelector('#aufgabenListe'); // Sucht die UL-Liste im DOM
+    ul.innerHTML = ''; // Löscht alte Inhalte, damit die Liste frisch aufgebaut wird
 
+    todos.forEach(t => { // Geht jedes Todo-Objekt aus dem Array durch
 
-// view.js hier sollen die Todos der User gerendert werden
+      const li = document.createElement('li'); // Erstellt ein <li>-Element
+      li.dataset.id = t.id; // Speichert die Todo-ID als data-id Attribut (für später z. B. Löschen)
+      li.className = t.done ? 'todo-item done' : 'todo-item'; // CSS-Klasse setzen (done = durchgestrichen)
 
+      const cb = document.createElement('input'); // Erstellt eine Checkbox
+      cb.type = 'checkbox'; // Typ = Checkbox
+      cb.checked = !!t.done; // Wert: erledigt = true/false
+      cb.className = 'todo-checkbox'; // Klasse für Styling + EventListener
+      cb.dataset.id = t.id; // ID auch hier speichern
 
-export function showMessage(message) {
-  swal(message);
-}
+      const span = document.createElement('span'); // Erstellt ein <span>-Element
+      span.className = 'todo-text'; // CSS-Klasse
+      span.textContent = t.text; // Text-Inhalt aus Todo
 
-export function showUserDashboard(email) {
-    document.getElementById("loginSection").classList.add("hidden");
-    document.getElementById("dashboardSection").classList.remove("hidden");
-    document.getElementById("userEmail").textContent = `Eingeloggt als: ${email}`;
-}
+      const del = document.createElement('button'); // Erstellt einen Button
+      del.className = 'todo-del'; // CSS-Klasse
+      del.textContent = 'Löschen'; // Beschriftung
+      del.dataset.id = t.id; // ID speichern, damit klar ist welches Todo gelöscht werden soll
 
-export function showLoginForm() {
-    document.getElementById("dashboardSection").classList.add("hidden");
-    document.getElementById("loginSection").classList.remove("hidden");
-    document.getElementById("userEmail").textContent = "";
-}
+      li.append(cb, span, del); // Hängt Checkbox, Text und Button ins <li>
+      ul.appendChild(li); // Fügt das fertige <li> in die UL ein
+    });
+  },
 
-export function renderToDos(todos) {
-  const todoList = document.getElementById("todoList");
-  todoList.innerHTML = "";
-
-  todos.forEach(todo => {
-    const li = document.createElement("li");
-    li.classList.add("liste"); // CSS-Klasse für Listenelemente
-
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.checked = todo.completed;
-    checkbox.classList.add("todo-checkbox");
-    // Event-Listener später im Controller binden
-
-    const span = document.createElement("span");
-    span.textContent = todo.task;
-    if (todo.completed) {
-      span.classList.add("completed"); // CSS-Klasse bei erledigten Aufgaben
-    } else {
-      span.classList.remove("completed");
-    }
-
-    const deleteBtn = document.createElement("button");
-    deleteBtn.textContent = "Löschen";
-    deleteBtn.classList.add("liste-btn"); // CSS-Klasse für Buttons
-    // Event-Listener später im Controller binden
-
-    li.appendChild(checkbox);
-    li.appendChild(span);
-    li.appendChild(deleteBtn);
-    todoList.appendChild(li);
-  });
-}
-
-
-
-
-
+  // ----------------------------------------------------
+  // Funktion: showMessage(text, type)
+  // Zeigt eine Nachricht im #msg-Element an
+  // type = "ok" (grün?) oder "err" (rot?)
+  // ----------------------------------------------------
+  showMessage(text, type = 'ok') {
+    const msg = document.querySelector('#msg'); // Sucht das Element mit ID msg
+    if (!msg) return; // Wenn nicht vorhanden, brich ab
+    msg.textContent = text; // Nachrichtentext einfügen
+    msg.className = `msg show ${type}`; // CSS-Klasse setzen: "msg show ok" oder "msg show err"
+  }
+};
