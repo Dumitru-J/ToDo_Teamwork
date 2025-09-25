@@ -12,6 +12,10 @@
   --radius:14px;
 }
 
+
+
+
+
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
@@ -26,6 +30,12 @@ body{
   border-radius:var(--radius);
   box-shadow:var(--shadow);
 }
+
+
+
+
+
+
 
 /* Überschriften */
 h1{font-size:1.4rem;margin:0 0 8px}
@@ -45,6 +55,11 @@ input:focus{border-color:var(--primary)}
 .btn.danger{background:var(--danger)}
 .btn.danger:hover{background:var(--danger-hover)}
 
+
+
+
+
+
 /* Auth-Seite */
 .auth .cards{
   display:grid; grid-template-columns:repeat(2, minmax(260px,1fr)); gap:18px; margin-top:10px;
@@ -59,6 +74,13 @@ input:focus{border-color:var(--primary)}
 .msg.ok{background:#e9f9ee; color:#1e7e34; border:1px solid #c9efd3}
 .msg.err{background:#fdecea; color:#a91e2c; border:1px solid #f5c2c7}
 
+
+
+
+
+
+
+
 /* Liste-Seite */
 .header{display:flex; justify-content:space-between; align-items:center; gap:10px}
 .header-right{display:flex; align-items:center; gap:10px}
@@ -72,6 +94,14 @@ input:focus{border-color:var(--primary)}
 .liste li span{flex:1}
 .liste li .del{background:var(--danger); color:#fff; border:none; border-radius:8px; padding:8px 10px; cursor:pointer}
 .liste li .del:hover{background:var(--danger-hover)}
+
+
+
+
+
+
+
+
 
 @media (max-width: 680px){
   .auth .cards{grid-template-columns:1fr}
