@@ -18,8 +18,8 @@ const router = express.Router();
 // Pfad zur Datei users.json -> speichert alle Benutzer
 const usersPath = path.join(__dirname, '..', 'data', 'users.json');
 
-// Pfad zur Datei todos.json -> speichert alle Todos
-const todosPath = path.join(__dirname, '..', 'data', 'todos.json');
+
+const todosDir = path.join(__dirname, '..', 'data', 'toDos');
 
 // ---------------------------------------------------------
 // Hilfsfunktionen für Dateizugriff
@@ -59,30 +59,40 @@ const newId = (prefix) =>
 // ---------------------------------------------------------
 
 // Registrierung: POST /api/users/registrieren
-router.post('/users/registrieren', async (req, res) => {
-  const { email, password } = req.body || {};              // email und password aus Request-Body
-  if (!email || !password)                                 // Wenn eins fehlt
-    return res.status(400).json({ error: 'email und password erforderlich' }); // Fehler 400 zurück
+router.post("/users/registrieren", async (req, res) => {
+  const { email, password } = req.body || {};
+  if (!email || !password) {
+    return res.status(400).json({ error: "email und password erforderlich" });
+  }
 
-  const users = await loadJSON(usersPath);                 // Alle User aus Datei laden
+  const users = await loadJSON(usersPath);
 
-  // Prüfen, ob Email schon existiert (case-insensitive)
+  // Prüfen ob Email schon existiert (case-insensitive)
   if (users.some((u) => u.email.toLowerCase() === email.toLowerCase())) {
-    return res.status(409).json({ error: 'Benutzer existiert bereits' }); // Fehler 409 zurück
+    return res.status(409).json({ error: "Benutzer existiert bereits" });
   }
 
   // Neuen Benutzer erstellen
   const user = {
-    id: newId('u'),                                        // Neue ID generieren
-    email,                                                 // Email speichern
-    password,                                              // Passwort im Klartext (nur Demo!)
-    createdAt: new Date().toISOString(),                   // Zeitstempel
+    id: newId("u"),
+    email,
+    password, // nur Demo: im Klartext!
+    createdAt: new Date().toISOString(),
   };
 
-  users.push(user);                                        // User zur Liste hinzufügen
-  await saveJSON(usersPath, users);                        // Liste in Datei zurückschreiben
+  users.push(user);
+  await saveJSON(usersPath, users);
 
-  res.status(201).json({ id: user.id, email: user.email }); // Antwort mit ID und Email (ohne Passwort)
+  // ---> Unterordner im ../toDos anlegen
+  const userTodoDir = path.join(todosDir, user.id);
+  try {
+    await fs.mkdir(userTodoDir, { recursive: true });
+  } catch (err) {
+    console.error("Fehler beim Anlegen des User-ToDo-Ordners:", err);
+    return res.status(500).json({ error: "Ordner konnte nicht erstellt werden" });
+  }
+
+  res.status(201).json({ id: user.id, email: user.email });
 });
 
 // Anmelden: POST /api/users/anmelden
