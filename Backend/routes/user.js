@@ -28,11 +28,6 @@ const usersPath = path.join(__dirname, '..', 'data', 'users.json');
 // Pfad zur Datei todos.json -> speichert alle Todos
 const todosPath = path.join(__dirname, '..', 'data', 'todos.json');
 
-
-// Pfad zur Datei lists.json -> speichert alle Listen
-const listsPath = path.join(__dirname, '..', 'data', 'lists.json');
-
-
 // ---------------------------------------------------------
 // Hilfsfunktionen für Dateizugriff
 // ---------------------------------------------------------
@@ -77,25 +72,26 @@ const newId = (prefix) =>
 
 // Registrierung: POST /api/users/registrieren
 router.post('/users/registrieren', async (req, res) => {
-  const { email, password } = req.body || {};
-  if (!email || !password)
-    return res.status(400).json({ error: 'email und password erforderlich' });
+  const { email, password } = req.body || {};              // email und password aus Request-Body
+  if (!email || !password)                                 // Wenn eins fehlt
+    return res.status(400).json({ error: 'email und password erforderlich' }); // Fehler 400 zurück
 
-  const users = await loadJSON(usersPath);
+  const users = await loadJSON(usersPath);                 // Alle User aus Datei laden
 
+  // Prüfen, ob Email schon existiert (case-insensitive)
   if (users.some((u) => u.email.toLowerCase() === email.toLowerCase())) {
-    return res.status(409).json({ error: 'Benutzer existiert bereits' });
+    return res.status(409).json({ error: 'Benutzer existiert bereits' }); // Fehler 409 zurück
   }
 
   const user = {
-    id: newId('u'),
-    email,
-    password,
-    createdAt: new Date().toISOString(),
+    id: newId('u'),                                        // Neue ID generieren
+    email,                                                 // Email speichern
+    password,                                              // Passwort im Klartext (nur Demo!)
+    createdAt: new Date().toISOString(),                   // Zeitstempel
   };
 
-  users.push(user);
-  await saveJSON(usersPath, users);
+  users.push(user);                                        // User zur Liste hinzufügen
+  await saveJSON(usersPath, users);                        // Liste in Datei zurückschreiben
 
   res.status(201).json({ id: user.id, email: user.email });
 });
