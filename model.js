@@ -59,20 +59,15 @@ export async function login(email, password) {                      // Funktion 
 
 
 // Alle nutzer Anzeigen (console.table)
-export async function userAnzeigen(){
-    const res = await fetch(`${API}/users`);
-    const users = await res.json();
+// export async function userAnzeigen(){
+//     const res = await fetch(`${API}/users`);
+//     const users = await res.json();
 
-    // Um Passwörter nicht im klartext anzeigen zu lassen
-    const emailsOnly = users.map(user => ({ email: user.email}));
-    console.table(emailsOnly);
+//     // Um Passwörter nicht im klartext anzeigen zu lassen
+//     const emailsOnly = users.map(user => ({ email: user.email}));
+//     console.table(emailsOnly);
 
-}
-
-
-
-
-
+// }
 
 
 
