@@ -14,24 +14,26 @@
     "createdAt": "2025-09-23T08:02:21.512Z"
   },
   {
-    "id": "t_mfzt9tkefxx9",
+    "id": "t_mg16jmbzz1hp",
     "userId": "u_mfzt942dewlw",
-    "text": "Oliver ist nicht mehr so lustig",
+    "text": "Lesen",
     "done": false,
-    "createdAt": "2025-09-25T19:33:48.398Z"
+    "createdAt": "2025-09-26T18:33:06.767Z"
   },
   {
-    "id": "t_mfztb37ogwkd",
+    "id": "t_mg16stpfmk8c",
     "userId": "u_mfzt942dewlw",
-    "text": "lol",
+    "listId": "l_mg16bspvhut6",
+    "text": "Lesen",
     "done": false,
-    "createdAt": "2025-09-25T19:34:47.556Z"
+    "createdAt": "2025-09-26T18:40:16.227Z"
   },
   {
-    "id": "t_mfztb714xz22",
+    "id": "t_mg16tgd732br",
     "userId": "u_mfzt942dewlw",
-    "text": "POS ist geil",
-    "done": false,
-    "createdAt": "2025-09-25T19:34:52.504Z"
+    "listId": "l_mg16cbf4d1v8",
+    "text": "Einkaufen",
+    "done": true,
+    "createdAt": "2025-09-26T18:40:45.595Z"
   }
 ]

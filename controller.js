@@ -1,50 +1,81 @@
 // controller.js
-import { getTodos, addTodo, updateTodo, deleteTodo, clearDone } from './model.js'; // Import der Datenfunktionen (API-Calls) aus model.js
-import { View } from './view.js'; // Import der View-Methoden für DOM-Anzeige
+import { getTodos, addTodo, updateTodo, deleteTodo, clearDone, getUserLists, addList } from './model.js';
+import { View } from './view.js';
 
-// Hilfsfunktion um den aktuellen Benutzer aus localStorage zu laden
-function getCurrentUser() { // Funktion beginnt
-  const id = localStorage.getItem('userId'); // userId aus localStorage holen
-  const email = localStorage.getItem('email'); // email aus localStorage holen
-  return id && email ? { id, email } : null; // wenn beide da → Objekt zurück, sonst null
+/**
+ * Hilfsfunktion, um den aktuellen Benutzer aus localStorage zu laden
+ * @returns {{id: string, email: string} | null} aktueller Benutzer oder null wenn nicht eingeloggt
+ */
+function getCurrentUser() {
+  const id = localStorage.getItem('userId');
+  const email = localStorage.getItem('email');
+  return id && email ? { id, email } : null;
 }
 
+export const Controller = {
+  /** @type {string|null} ID der aktuell aktiven To-Do-Liste */
+  activeListId: null,
+
+  /**
+   * Initialisiert Controller, bindet Events und lädt initial Daten.
+   * @returns {Promise<void>}
+   */
+  async init() {
+    const taskForm = document.querySelector('#taskForm');
+    const listeForm = document.querySelector('#listeForm');
+    const listeAuswahl = document.querySelector('#listeAuswahl');
+
+    if (!taskForm || !listeForm || !listeAuswahl) return;
+
+    const user = getCurrentUser();
+    if (!user) {
+      window.location.href = 'index.html';
+      return;
+    }
+
+    const whoEl = document.querySelector('#who');
+    if (whoEl) whoEl.textContent = `Angemeldet als ${user.email}`;
+
+    // Liste der To-Do-Listen des Benutzers laden
+    const listen = await getUserLists(user.id);
+    this.populateListeAuswahl(listen);
+
+    // Aktive Liste auf erste setzen, falls vorhanden
+    this.activeListId = listen.length > 0 ? listen[0].id : null;
+
+    if (this.activeListId) {
+      await this.reload();
+    }
+
+    // Event: Auswahl der aktiven Liste ändern
+    listeAuswahl.addEventListener('change', async (e) => {
+      /** @type {HTMLSelectElement} */
+      const target = e.target;
+      this.activeListId = target.value;
+      await this.reload();
+    });
 
 
 
 
-export const Controller = { // Controller-Objekt exportieren
 
-  async init() { // Haupt-Initialisierungsfunktion, wird beim Laden der Seite aufgerufen
+    // Event: Neue To-Do-Liste hinzufügen
+    listeForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const neueListeInput = document.querySelector('#neueListe');
+      const neueListeName = neueListeInput.value.trim();
+      if (!neueListeName) return;
 
-    const taskForm = document.querySelector('#taskForm'); // Formular-Element suchen
-    if (!taskForm) return; // wenn kein Formular existiert → abbrechen (nicht auf Aufgaben-Seite)
-
-    const user = getCurrentUser(); // aktuellen User holen
-    if (!user) { window.location.href = 'index.html'; return; } // wenn nicht eingeloggt → zurück zur Loginseite
-
-    const whoEl = document.querySelector('#who'); // Element mit Useranzeige suchen
-    if (whoEl) whoEl.textContent = `Angemeldet als ${user.email}`; // falls vorhanden → User-E-Mail anzeigen
-
-    await this.reload(); // aktuelle Todos vom Backend laden und anzeigen
-
-
-
-    
-
-
-    // ----------------- Neues Todo hinzufügen -----------------
-    taskForm.addEventListener('submit', async (e) => { // EventListener für Formular-Submit
-      e.preventDefault(); // Standard-Formularverhalten (Seite neu laden) verhindern
-      const input = document.querySelector('#neueAufgabe'); // Eingabefeld suchen
-      const text = input.value.trim(); // Wert lesen und Leerzeichen entfernen
-      if (!text) return; // wenn leer → nichts tun
       try {
-        await addTodo(user.id, text); // neues Todo beim Backend anlegen
-        input.value = ''; // Eingabefeld leeren
-        await this.reload(); // Todos neu laden und anzeigen
+        /** @type {{id: string, name: string}} */
+        const neueListe = await addList(user.id, neueListeName);
+        neueListeInput.value = '';
+        const updatedListen = await getUserLists(user.id);
+        this.populateListeAuswahl(updatedListen);
+        this.activeListId = neueListe.id;
+        await this.reload();
       } catch (err) {
-        View.showMessage(err.message, 'err'); // Fehler anzeigen
+        View.showMessage(err.message, 'err');
       }
     });
 
@@ -52,19 +83,36 @@ export const Controller = { // Controller-Objekt exportieren
 
 
 
+    // Event: Neue Aufgabe hinzufügen
+    taskForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const input = document.querySelector('#neueAufgabe');
+      const text = input.value.trim();
+      if (!text || !this.activeListId) return;
+
+      try {
+        await addTodo(user.id, text, this.activeListId);
+        input.value = '';
+        await this.reload();
+      } catch (err) {
+        View.showMessage(err.message, 'err');
+      }
+    });
 
 
-    
-    // ----------------- Checkbox ändern (erledigt ja/nein) -----------------
-    document.querySelector('#aufgabenListe').addEventListener('change', async (e) => { // EventListener auf UL (Event Delegation)
-      const tgt = e.target; // das Ziel-Element (wer die Änderung ausgelöst hat)
-      if (tgt && tgt.matches('.todo-checkbox')) { // prüfen ob es eine Checkbox ist
-        const id = tgt.dataset.id; // Todo-ID aus data-id lesen
+
+
+
+    // Event: Checkbox geändert (erledigt / nicht erledigt)
+    document.querySelector('#aufgabenListe').addEventListener('change', async (e) => {
+      const tgt = e.target;
+      if (tgt && tgt.matches('.todo-checkbox')) {
+        const id = tgt.dataset.id;
         try {
-          await updateTodo(id, { done: tgt.checked }); // Backend: Todo auf erledigt/nicht erledigt setzen
-          await this.reload(); // Todos neu laden
+          await updateTodo(id, { done: tgt.checked });
+          await this.reload();
         } catch (err) {
-          View.showMessage(err.message, 'err'); // Fehler anzeigen
+          View.showMessage(err.message, 'err');
         }
       }
     });
@@ -73,40 +121,29 @@ export const Controller = { // Controller-Objekt exportieren
 
 
 
-
-
-
-
-    // ----------------- Todo löschen -----------------
-    document.querySelector('#aufgabenListe').addEventListener('click', async (e) => { // EventListener für Klicks auf UL
-      const tgt = e.target; // Ziel-Element
-      if (tgt && tgt.matches('.todo-del')) { // prüfen ob Klick auf Löschen-Button
-        const id = tgt.dataset.id; // ID aus data-id holen
+    // Event: ToDo löschen
+    document.querySelector('#aufgabenListe').addEventListener('click', async (e) => {
+      const tgt = e.target;
+      if (tgt && tgt.matches('.todo-del')) {
+        const id = tgt.dataset.id;
         try {
-          await deleteTodo(id); // Backend: Todo löschen
-          await this.reload(); // Todos neu laden
+          await deleteTodo(id);
+          await this.reload();
         } catch (err) {
-          View.showMessage(err.message, 'err'); // Fehler anzeigen
+          View.showMessage(err.message, 'err');
         }
       }
     });
 
-
-
-
-
-
-
-
-    // ----------------- Erledigte Todos löschen -----------------
-    const clearBtn = document.querySelector('#clearDone'); // Button zum Aufräumen suchen
-    if (clearBtn) { // wenn vorhanden
-      clearBtn.addEventListener('click', async () => { // Klick-Event
+    // Event: Erledigte ToDos löschen
+    const clearBtn = document.querySelector('#clearDone');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', async () => {
         try {
-          await clearDone(user.id); // Backend: erledigte Todos löschen
-          await this.reload(); // Todos neu laden
+          await clearDone(user.id, this.activeListId);
+          await this.reload();
         } catch (e) {
-          View.showMessage(e.message, 'err'); // Fehler anzeigen
+          View.showMessage(e.message, 'err');
         }
       });
     }
@@ -116,24 +153,54 @@ export const Controller = { // Controller-Objekt exportieren
 
 
 
-
-    // ----------------- Abmelden -----------------
-    const logoutBtn = document.querySelector('#abmelden'); // Logout-Button suchen
-    if (logoutBtn) { // wenn vorhanden
-      logoutBtn.addEventListener('click', () => { // Klick-Event
-        localStorage.removeItem('userId'); // UserID aus localStorage löschen
-        localStorage.removeItem('email'); // Email aus localStorage löschen
-        window.location.href = 'index.html'; // zurück zur Login-Seite
+    // Event: Abmelden
+    const logoutBtn = document.querySelector('#abmelden');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', () => {
+        localStorage.removeItem('userId');
+        localStorage.removeItem('email');
+        window.location.href = 'index.html';
       });
     }
   },
 
-  async reload() { // Hilfsfunktion zum Todos neu laden
-    const user = getCurrentUser(); // aktuellen User laden
-    const todos = await getTodos(user.id); // Todos vom Backend holen
-    View.renderTodos(todos); // Todos mit View.js darstellen
+
+
+
+
+
+
+
+
+  /**
+   * Befüllt das Dropdown mit den To-Do-Listen
+   * @param {Array<{id: string, name: string}>} listen Array von Listenobjekten
+   */
+  populateListeAuswahl(listen) {
+    const listeAuswahl = document.querySelector('#listeAuswahl');
+    listeAuswahl.innerHTML = '';
+    listen.forEach(liste => {
+      const option = document.createElement('option');
+      option.value = liste.id;
+      option.textContent = liste.name;
+      listeAuswahl.appendChild(option);
+    });
+  },
+
+
+
+
+
+
+  /**
+   * Lädt die ToDos der aktiven Liste neu und rendert sie
+   * @returns {Promise<void>}
+   */
+  async reload() {
+    const user = getCurrentUser();
+    if (!user || !this.activeListId) return;
+
+    const todos = await getTodos(user.id, this.activeListId);
+    View.renderTodos(todos);
   }
 };
-
-
-

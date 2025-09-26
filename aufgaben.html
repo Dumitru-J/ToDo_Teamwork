@@ -17,7 +17,24 @@
       </div>
     </header>
 
-    
+
+
+    <!-- neu (Lukas) -->
+    <!-- Auswahl der To-Do-Liste -->
+    <label for="listeAuswahl">To-Do Liste wählen:</label>
+    <select id="listeAuswahl">
+      <!-- Optionen werden per JavaScript hinzugefügt -->
+    </select>
+
+    <!-- Neues Listenformular -->
+    <form id="listeForm" class="eingabe-liste">
+      <input type="text" id="neueListe" placeholder="Neue To-Do Liste erstellen…" required />
+      <button type="submit" class="btn">➕ Liste hinzufügen</button>
+    </form>
+
+
+
+
     <form id="taskForm" class="eingabe">
       <input type="text" id="neueAufgabe" placeholder="Neue Aufgabe eingeben…" required>
       <button type="submit" class="btn">➕ Hinzufügen</button>
