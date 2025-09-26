@@ -3,9 +3,22 @@
 // Basis-URL deines Backends (läuft auf localhost:3000/api)
 const API = 'http://localhost:3000/api';
 
-// ----------------------------------------------
-// Benutzer registrieren
-// ----------------------------------------------
+
+
+//  |-------------Anlegen und speichern von Usern-------------|
+
+
+/**
+ * Nutzer registrieren, anmelden, abmelden
+ * @param {string} email - Die Email adresse der Nutzer
+ * @param {string} password - Das hinterlegte Passwort der Nutzer
+ * @returns {Promise<Object>} Antwort vom Server asl JSON (Erfolg oder Fehler) zB existiert, passwort falsch
+ */
+
+
+
+// Nutzer anlegen
+
 export async function register(email, password) {                   // Funktion für Registrierung
   const res = await fetch(`${API}/users/registrieren`, {            // POST-Request an /users/registrieren
     method: 'POST',                                                 // HTTP-Methode POST
@@ -13,13 +26,15 @@ export async function register(email, password) {                   // Funktion 
     body: JSON.stringify({ email, password })                       // Request-Body mit E-Mail und Passwort
   });
   const data = await res.json();                                    // Antwort als JSON parsen
-  if (!res.ok) throw new Error(data.error || 'Registrierung fehlgeschlagen'); // Wenn Status != 200-299 → Fehler werfen
+  if (!res.ok) throw new Error(data.error || 'Registrierung fehlgeschlagen');           // Wenn Status != 200-299 → Fehler werfen
   return data;                                                      // Erfolgreich → Daten zurückgeben ({id, email})
 }
 
-// ----------------------------------------------
-// Benutzer anmelden (Login)
-// ----------------------------------------------
+
+
+
+// Nutzer anmelden (gleich wie regisitreiren)
+
 export async function login(email, password) {                      // Funktion für Login
   const res = await fetch(`${API}/users/anmelden`, {                // POST-Request an /users/anmelden
     method: 'POST',                                                 // HTTP-Methode POST
@@ -31,9 +46,59 @@ export async function login(email, password) {                      // Funktion 
   return data;                                                      // Erfolgreich → {id, email}
 }
 
-// ----------------------------------------------
-// Todos eines Users laden
-// ----------------------------------------------
+
+
+
+
+
+
+/**
+ * Nur Emails der Nutzer in der Konsole ausgeben. test Ausgabe
+ * @returns {Promise<void>} Keine Rückgabe!
+ */
+
+
+// Alle nutzer Anzeigen (console.table)
+export async function userAnzeigen(){
+    const res = await fetch(`${API}/users`);
+    const users = await res.json();
+
+    // Um Passwörter nicht im klartext anzeigen zu lassen
+    const emailsOnly = users.map(user => ({ email: user.email}));
+    console.table(emailsOnly);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//  |-------------Anlegen und verwalten der ToDos der registrierten User-------------|
+
+
+/**
+ * Aufgaben abrufen, anlegen, aktualisieren, löschen
+ * @param {string} email - E-mail des Users
+ * @param {string} aufgabe - Text der Aufgabe
+ * @param {string|number} taskId - Eindeutuge Aufgabennummer 
+ * @param {boolean} status - Erledigt / Unerledigt (True / False)
+ * 
+ * @returns {Promise<Array>} Array der Aufgaben
+ * @returns {Promise<Object>} Antwort vom Server
+ */
+
+
+
+// Alle ToDos eines Users Anzeigen
 export async function getTodos(userId) {                            // Funktion: Todos für User laden
   if (!userId) throw new Error('Kein userId – erst einloggen!');     // Sicherheit: ohne userId nicht möglich
   const res = await fetch(`${API}/todos?userId=${encodeURIComponent(userId)}`); // GET-Request an /todos mit Query userId
@@ -41,9 +106,9 @@ export async function getTodos(userId) {                            // Funktion:
   return res.json();                                                 // Erfolgreich → Array von Todos zurück
 }
 
-// ----------------------------------------------
-// Neues Todo anlegen
-// ----------------------------------------------
+
+
+// ToDo anlegen     [eine Angelegte Aufgabe ist Standardmäßig als false (unerledigt) festgelegt]
 export async function addTodo(userId, text) {                       // Funktion: neues Todo anlegen
   const res = await fetch(`${API}/todos`, {                         // POST an /todos
     method: 'POST',                                                 // HTTP POST
@@ -54,9 +119,9 @@ export async function addTodo(userId, text) {                       // Funktion:
   return res.json();                                                 // Antwort = neues Todo-Objekt
 }
 
-// ----------------------------------------------
-// Todo aktualisieren (Text oder erledigt-Status ändern)
-// ----------------------------------------------
+
+
+// // ToDo aktualisieren   -> Erledigt / Offen
 export async function updateTodo(id, patch) {                       // Funktion: Todo updaten
   const res = await fetch(`${API}/todos/${encodeURIComponent(id)}`, { // PATCH an /todos/:id
     method: 'PATCH',                                                // HTTP PATCH
@@ -67,9 +132,9 @@ export async function updateTodo(id, patch) {                       // Funktion:
   return res.json();                                                 // Antwort = aktualisiertes Todo
 }
 
-// ----------------------------------------------
-// Todo löschen
-// ----------------------------------------------
+
+
+// ToDo löschen bei Bedarf
 export async function deleteTodo(id) {                              // Funktion: Todo löschen
   const res = await fetch(`${API}/todos/${encodeURIComponent(id)}`, { // DELETE an /todos/:id
     method: 'DELETE'                                                // HTTP DELETE
@@ -78,9 +143,8 @@ export async function deleteTodo(id) {                              // Funktion:
   return res.json();                                                 // Antwort = gelöschtes Todo
 }
 
-// ----------------------------------------------
+
 // Alle erledigten Todos eines Users löschen
-// ----------------------------------------------
 export async function clearDone(userId) {                           // Funktion: erledigte Todos löschen
   const res = await fetch(`${API}/todos?userId=${encodeURIComponent(userId)}&done=true`, { // DELETE an /todos?userId=..&done=true
     method: 'DELETE'                                                // HTTP DELETE
@@ -88,3 +152,7 @@ export async function clearDone(userId) {                           // Funktion:
   if (!res.ok) throw new Error('Erledigte löschen fehlgeschlagen');  // Fehler prüfen
   return res.json();                                                 // Antwort = {removed: n}
 }
+
+
+
+

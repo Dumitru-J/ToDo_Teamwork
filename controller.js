@@ -9,6 +9,10 @@ function getCurrentUser() { // Funktion beginnt
   return id && email ? { id, email } : null; // wenn beide da → Objekt zurück, sonst null
 }
 
+
+
+
+
 export const Controller = { // Controller-Objekt exportieren
 
   async init() { // Haupt-Initialisierungsfunktion, wird beim Laden der Seite aufgerufen
@@ -23,6 +27,11 @@ export const Controller = { // Controller-Objekt exportieren
     if (whoEl) whoEl.textContent = `Angemeldet als ${user.email}`; // falls vorhanden → User-E-Mail anzeigen
 
     await this.reload(); // aktuelle Todos vom Backend laden und anzeigen
+
+
+
+    
+
 
     // ----------------- Neues Todo hinzufügen -----------------
     taskForm.addEventListener('submit', async (e) => { // EventListener für Formular-Submit
@@ -39,6 +48,13 @@ export const Controller = { // Controller-Objekt exportieren
       }
     });
 
+
+
+
+
+
+
+    
     // ----------------- Checkbox ändern (erledigt ja/nein) -----------------
     document.querySelector('#aufgabenListe').addEventListener('change', async (e) => { // EventListener auf UL (Event Delegation)
       const tgt = e.target; // das Ziel-Element (wer die Änderung ausgelöst hat)
@@ -52,6 +68,14 @@ export const Controller = { // Controller-Objekt exportieren
         }
       }
     });
+
+
+
+
+
+
+
+
 
     // ----------------- Todo löschen -----------------
     document.querySelector('#aufgabenListe').addEventListener('click', async (e) => { // EventListener für Klicks auf UL
@@ -67,6 +91,13 @@ export const Controller = { // Controller-Objekt exportieren
       }
     });
 
+
+
+
+
+
+
+
     // ----------------- Erledigte Todos löschen -----------------
     const clearBtn = document.querySelector('#clearDone'); // Button zum Aufräumen suchen
     if (clearBtn) { // wenn vorhanden
@@ -79,6 +110,12 @@ export const Controller = { // Controller-Objekt exportieren
         }
       });
     }
+
+
+
+
+
+
 
     // ----------------- Abmelden -----------------
     const logoutBtn = document.querySelector('#abmelden'); // Logout-Button suchen
@@ -97,3 +134,6 @@ export const Controller = { // Controller-Objekt exportieren
     View.renderTodos(todos); // Todos mit View.js darstellen
   }
 };
+
+
+
