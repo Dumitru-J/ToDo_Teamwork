@@ -15,6 +15,7 @@ const API = 'http://localhost:3000/api';
  */
 export async function getUserLists(userId) {
   if (!userId) throw new Error('Kein userId – erst einloggen!');
+  
   const res = await fetch(`${API}/lists?userId=${encodeURIComponent(userId)}`);
   if (!res.ok) throw new Error(`Listen laden fehlgeschlagen (${res.status})`);
   return res.json();

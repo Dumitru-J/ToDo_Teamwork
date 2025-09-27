@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "id": "t_mg1uguvb6yg7",
+    "userId": "u_mg1u6i168xpg",
+    "listId": "l_mg1ugsazxmf8",
+    "text": "Kochen",
+    "done": false,
+    "createdAt": "2025-09-27T05:42:48.647Z"
+  },
+  {
+    "id": "t_mg1uh0q8b7ep",
+    "userId": "u_mg1u6i168xpg",
+    "listId": "l_mg1ugx27rebr",
+    "text": "Lesen",
+    "done": false,
+    "createdAt": "2025-09-27T05:42:56.240Z"
+  }
+]

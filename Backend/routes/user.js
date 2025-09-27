@@ -28,6 +28,12 @@ const usersPath = path.join(__dirname, '..', 'data', 'users.json');
 // Pfad zur Datei todos.json -> speichert alle Todos
 const todosPath = path.join(__dirname, '..', 'data', 'todos.json');
 
+
+// Pfad zur Datei lists.json -> speichert alle Listen
+const listsPath = path.join(__dirname, '..', 'data', 'lists.json');
+
+
+
 // ---------------------------------------------------------
 // Hilfsfunktionen für Dateizugriff
 // ---------------------------------------------------------

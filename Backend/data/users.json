@@ -1,38 +1,8 @@
 [
   {
-    "id": "u_mfw8t4gf1u7i",
-    "email": "alex@live.at",
-    "password": "123",
-    "createdAt": "2025-09-23T07:37:38.511Z"
-  },
-  {
-    "id": "u_mfw8ypvlo8uj",
-    "email": "dimi@yahoo.de",
-    "password": "123",
-    "createdAt": "2025-09-23T07:41:59.553Z"
-  },
-  {
-    "id": "u_mfzt942dewlw",
-    "email": "asd@asd",
+    "id": "u_mg1u6i168xpg",
+    "email": "lukas@asd.at",
     "password": "1234",
-    "createdAt": "2025-09-25T19:33:15.349Z"
-  },
-  {
-    "id": "u_mg14sprr3gma",
-    "email": "oliver@asd",
-    "password": "1234",
-    "createdAt": "2025-09-26T17:44:11.895Z"
-  },
-  {
-    "id": "u_mg14yw3m33k0",
-    "email": "test@mail",
-    "password": "1234",
-    "createdAt": "2025-09-26T17:49:00.034Z"
-  },
-  {
-    "id": "u_mg14zsxtm1a2",
-    "email": "123@123",
-    "password": "1234",
-    "createdAt": "2025-09-26T17:49:42.593Z"
+    "createdAt": "2025-09-27T05:34:45.450Z"
   }
 ]
